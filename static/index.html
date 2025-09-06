@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Collector</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f0f0f;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .header h1 {
+            color: #4CAF50;
+            font-size: 2rem;
+            font-weight: 300;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: #45a049;
+        }
+
+        .btn-secondary {
+            background: #666;
+        }
+
+        .btn-secondary:hover {
+            background: #777;
+        }
+
+        .btn-danger {
+            background: #f44336;
+        }
+
+        .btn-danger:hover {
+            background: #da190b;
+        }
+
+        /* Login Form */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 60vh;
+        }
+
+        .login-card {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .login-card h2 {
+            margin-bottom: 30px;
+            color: #4CAF50;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #ccc;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #555;
+            border-radius: 6px;
+            background: #2a2a2a;
+            color: #e0e0e0;
+            font-size: 16px;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: none;
+        }
+
+        .dashboard.active {
+            display: block;
+        }
+
+        /* Filters */
+        .filters {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-group label {
+            margin-bottom: 5px;
+            color: #ccc;
+            font-size: 14px;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            padding: 8px;
+            border: 1px solid #555;
+            border-radius: 4px;
+            background: #2a2a2a;
+            color: #e0e0e0;
+        }
+
+        /* KPI Cards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .kpi-card {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .kpi-card h3 {
+            color: #4CAF50;
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .kpi-card p {
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+
+        /* Table */
+        .table-container {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .table-header {
+            background: #2a2a2a;
+            padding: 15px 20px;
+            border-bottom: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-header h3 {
+            color: #4CAF50;
+        }
+
+        .table-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .table-controls select {
+            padding: 5px 10px;
+            border: 1px solid #555;
+            border-radius: 4px;
+            background: #2a2a2a;
+            color: #e0e0e0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+
+        th {
+            background: #2a2a2a;
+            color: #4CAF50;
+            font-weight: 600;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        th:hover {
+            background: #333;
+        }
+
+        td {
+            color: #e0e0e0;
+        }
+
+        tr:hover {
+            background: #222;
+        }
+
+        .links {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .link {
+            color: #4CAF50;
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: 500;
+            padding: 4px 8px;
+            border: 1px solid #4CAF50;
+            border-radius: 4px;
+            transition: all 0.3s;
+            background: transparent;
+            min-width: 40px;
+            text-align: center;
+            display: inline-block;
+        }
+
+        .link:hover {
+            background: #4CAF50;
+            color: #0f0f0f;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(76, 175, 80, 0.3);
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 30px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            color: #4CAF50;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #e0e0e0;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .form-row.full {
+            grid-template-columns: 1fr;
+        }
+
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #555;
+            border-radius: 6px;
+            background: #2a2a2a;
+            color: #e0e0e0;
+            font-size: 16px;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 6px;
+            color: white;
+            z-index: 1001;
+            transform: translateX(400px);
+            transition: transform 0.3s;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.success {
+            background: #4CAF50;
+        }
+
+        .toast.error {
+            background: #f44336;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .header-controls {
+                justify-content: center;
+            }
+
+            .filters {
+                grid-template-columns: 1fr;
+            }
+
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .table-container {
+                overflow-x: auto;
+            }
+
+            table {
+                min-width: 800px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #ccc;
+        }
+
+        .spinner {
+            border: 3px solid #333;
+            border-top: 3px solid #4CAF50;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Integration Help */
+        .integration-help {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .integration-help h3 {
+            color: #4CAF50;
+            margin-bottom: 15px;
+        }
+
+        .integration-help code {
+            background: #2a2a2a;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #4CAF50;
+            font-family: 'Courier New', monospace;
+        }
+
+        .integration-help pre {
+            background: #2a2a2a;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Login Form -->
+        <div id="loginContainer" class="login-container">
+            <div class="login-card">
+                <h2>Currency Collector</h2>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn">Login</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="dashboard" class="dashboard">
+            <!-- Header -->
+            <div class="header">
+                <h1>Currency Collector</h1>
+                <div class="header-controls">
+                    <button class="btn" onclick="openAddModal()">Add Note</button>
+                    <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">Import CSV</button>
+                    <input type="file" id="importFile" accept=".csv" style="display: none" onchange="importCSV()">
+                    <a href="/api/notes.csv" class="btn btn-secondary" target="_blank">Export CSV</a>
+                    <button class="btn btn-secondary" onclick="loadNotes()">Refresh</button>
+                    <button class="btn btn-danger" onclick="logout()">Logout</button>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="searchInput">Search</label>
+                    <input type="text" id="searchInput" placeholder="Search notes..." oninput="applyFilters()">
+                </div>
+                <div class="filter-group">
+                    <label for="countryFilter">Country</label>
+                    <select id="countryFilter" onchange="applyFilters()">
+                        <option value="">All Countries</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="gradeFilter">Grade</label>
+                    <select id="gradeFilter" onchange="applyFilters()">
+                        <option value="">All Grades</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- KPI Cards -->
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <h3 id="totalCount">0</h3>
+                    <p>Total Notes</p>
+                </div>
+                <div class="kpi-card">
+                    <h3 id="filteredCount">0</h3>
+                    <p>Filtered Notes</p>
+                </div>
+                <div class="kpi-card">
+                    <h3 id="totalPurchase">$0.00</h3>
+                    <p>Total Purchase Price</p>
+                </div>
+                <div class="kpi-card">
+                    <h3 id="totalEstimate">$0.00</h3>
+                    <p>Total Est. Value</p>
+                </div>
+                <div class="kpi-card">
+                    <h3 id="portfolioROI">—</h3>
+                    <p>Portfolio ROI</p>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="table-container">
+                <div class="table-header">
+                    <h3>Notes</h3>
+                    <div class="table-controls">
+                        <label for="sortSelect">Sort by:</label>
+                        <select id="sortSelect" onchange="sortTable()">
+                            <option value="est_value_desc">Est. Value (High to Low)</option>
+                            <option value="purchase_price_desc">Purchase Price (High to Low)</option>
+                            <option value="grade_desc">Grade (High to Low)</option>
+                            <option value="country_asc">Country (A to Z)</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="tableContainer">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        Loading notes...
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Add/Edit Modal -->
+    <div id="noteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Add Note</h3>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <form id="noteForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="noteId">Note ID</label>
+                        <input type="text" id="noteId" name="note_id" placeholder="Auto-generated if empty">
+                    </div>
+                    <div class="form-group">
+                        <label for="country">Country *</label>
+                        <input type="text" id="country" name="country" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="pick">Pick *</label>
+                        <input type="text" id="pick" name="pick" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="grade">Grade *</label>
+                        <input type="number" id="grade" name="grade" step="0.1" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="purchasePrice">Purchase Price *</label>
+                        <input type="number" id="purchasePrice" name="purchase_price" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="epq">EPQ</label>
+                        <input type="text" id="epq" name="epq">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="pmgCert">PMG Cert</label>
+                        <input type="text" id="pmgCert" name="pmg_cert">
+                    </div>
+                    <div class="form-group">
+                        <label for="denomination">Denomination</label>
+                        <input type="text" id="denomination" name="denomination">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="year">Year</label>
+                        <input type="number" id="year" name="year">
+                    </div>
+                    <div class="form-group">
+                        <label for="serial">Serial</label>
+                        <input type="text" id="serial" name="serial">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="purchaseDate">Purchase Date</label>
+                        <input type="date" id="purchaseDate" name="purchase_date">
+                    </div>
+                </div>
+                <div class="form-row full">
+                    <div class="form-group">
+                        <label for="notes">Notes</label>
+                        <textarea id="notes" name="notes" placeholder="Additional notes..."></textarea>
+                    </div>
+                </div>
+                <div style="text-align: right; margin-top: 20px;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn">Save Note</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        let notes = [];
+        let filteredNotes = [];
+        let currentEditId = null;
+
+        // Global error handler for API calls
+        async function handleApiCall(apiCall) {
+            try {
+                const response = await apiCall();
+                if (response.status === 401 || response.status === 403) {
+                    showToast('Session expired. Please login again.', 'error');
+                    showLogin();
+                    return null;
+                }
+                return response;
+            } catch (error) {
+                console.error('API call failed:', error);
+                showToast('Network error. Please try again.', 'error');
+                return null;
+            }
+        }
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            document.getElementById('loginForm').addEventListener('submit', handleLogin);
+            document.getElementById('noteForm').addEventListener('submit', handleNoteSubmit);
+        });
+
+        // Authentication
+        async function checkAuth() {
+            try {
+                const response = await fetch('/api/notes', { credentials: 'include' });
+                if (response.ok) {
+                    showDashboard();
+                    loadNotes();
+                } else {
+                    showLogin();
+                }
+            } catch (error) {
+                showLogin();
+            }
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const password = document.getElementById('password').value;
+            
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ password }),
+                    credentials: 'include'
+                });
+
+                if (response.ok) {
+                    showDashboard();
+                    loadNotes();
+                    showToast('Login successful!', 'success');
+                } else {
+                    showToast('Invalid password', 'error');
+                }
+            } catch (error) {
+                showToast('Login failed', 'error');
+            }
+        }
+
+        async function logout() {
+            try {
+                await fetch('/api/logout', { credentials: 'include' });
+                showLogin();
+                showToast('Logged out successfully', 'success');
+            } catch (error) {
+                showToast('Logout failed', 'error');
+            }
+        }
+
+        function showLogin() {
+            document.getElementById('loginContainer').style.display = 'flex';
+            document.getElementById('dashboard').classList.remove('active');
+        }
+
+        function showDashboard() {
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('dashboard').classList.add('active');
+        }
+
+        // Data loading
+        async function loadNotes() {
+            try {
+                const response = await fetch('/api/notes', { credentials: 'include' });
+                if (response.ok) {
+                    notes = await response.json();
+                    filteredNotes = [...notes];
+                    updateFilters();
+                    renderTable();
+                    updateKPIs();
+                } else if (response.status === 401 || response.status === 403) {
+                    showToast('Session expired. Please login again.', 'error');
+                    showLogin();
+                } else {
+                    showToast('Failed to load notes', 'error');
+                }
+            } catch (error) {
+                showToast('Failed to load notes', 'error');
+            }
+        }
+
+        function updateFilters() {
+            const countries = [...new Set(notes.map(n => n.country).filter(Boolean))].sort();
+            const grades = [...new Set(notes.map(n => n.grade).filter(Boolean))].sort((a, b) => b - a);
+
+            const countryFilter = document.getElementById('countryFilter');
+            const gradeFilter = document.getElementById('gradeFilter');
+
+            countryFilter.innerHTML = '<option value="">All Countries</option>' +
+                countries.map(c => `<option value="${c}">${c}</option>`).join('');
+
+            gradeFilter.innerHTML = '<option value="">All Grades</option>' +
+                grades.map(g => `<option value="${g}">${g}</option>`).join('');
+        }
+
+        function applyFilters() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const country = document.getElementById('countryFilter').value;
+            const grade = document.getElementById('gradeFilter').value;
+
+            filteredNotes = notes.filter(note => {
+                const matchesSearch = !search || 
+                    note.note_id?.toLowerCase().includes(search) ||
+                    note.country?.toLowerCase().includes(search) ||
+                    note.pick?.toLowerCase().includes(search) ||
+                    note.denomination?.toLowerCase().includes(search) ||
+                    note.year?.toString().includes(search) ||
+                    note.serial?.toLowerCase().includes(search) ||
+                    note.pmg_cert?.toLowerCase().includes(search) ||
+                    note.grade?.toString().includes(search) ||
+                    note.epq?.toLowerCase().includes(search) ||
+                    note.purchase_price?.toString().includes(search) ||
+                    note.purchase_date?.toLowerCase().includes(search) ||
+                    note.est_value?.toString().includes(search) ||
+                    note.est_updated_at?.toLowerCase().includes(search) ||
+                    note.notes?.toLowerCase().includes(search);
+                
+                const matchesCountry = !country || note.country === country;
+                const matchesGrade = !grade || note.grade == grade;
+
+                return matchesSearch && matchesCountry && matchesGrade;
+            });
+
+            renderTable();
+            updateKPIs();
+        }
+
+        function sortTable() {
+            const sortBy = document.getElementById('sortSelect').value;
+            
+            filteredNotes.sort((a, b) => {
+                switch (sortBy) {
+                    case 'est_value_desc':
+                        return (b.est_value || 0) - (a.est_value || 0);
+                    case 'purchase_price_desc':
+                        return (b.purchase_price || 0) - (a.purchase_price || 0);
+                    case 'grade_desc':
+                        return (b.grade || 0) - (a.grade || 0);
+                    case 'country_asc':
+                        return (a.country || '').localeCompare(b.country || '');
+                    default:
+                        return 0;
+                }
+            });
+
+            renderTable();
+        }
+
+        function renderTable() {
+            const container = document.getElementById('tableContainer');
+            
+            if (filteredNotes.length === 0) {
+                container.innerHTML = '<div class="loading">No notes found</div>';
+                return;
+            }
+
+            const table = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Note ID</th>
+                            <th>Country</th>
+                            <th>Pick</th>
+                            <th>Denomination</th>
+                            <th>Year</th>
+                            <th>Serial</th>
+                            <th>PMG Cert</th>
+                            <th>Grade</th>
+                            <th>EPQ</th>
+                            <th>Purchase Price</th>
+                            <th>Purchase Date</th>
+                            <th>Est. Value</th>
+                            <th>Est. Updated</th>
+                            <th>Notes</th>
+                            <th>Links</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${filteredNotes.map(note => `
+                            <tr>
+                                <td>${note.note_id || ''}</td>
+                                <td>${note.country || ''}</td>
+                                <td>${note.pick || ''}</td>
+                                <td>${note.denomination || ''}</td>
+                                <td>${note.year || ''}</td>
+                                <td>${note.serial || ''}</td>
+                                <td>${note.pmg_cert || ''}</td>
+                                <td>${note.grade || ''}</td>
+                                <td>${note.epq || ''}</td>
+                                <td>$${(note.purchase_price || 0).toFixed(2)}</td>
+                                <td>${note.purchase_date || ''}</td>
+                                <td>${note.est_value ? '$' + note.est_value.toFixed(2) : ''}</td>
+                                <td>${note.est_updated_at ? new Date(note.est_updated_at).toLocaleDateString() : ''}</td>
+                                <td>${note.notes || ''}</td>
+                                <td class="links">
+                                    ${note.pmg_cert ? `<a href="https://www.pmgnotes.com/certlookup/?CertNumber=${note.pmg_cert}&Grade=${note.grade}&lookup=" target="_blank" class="link">PMG</a>` : ''}
+                                    <a href="${buildEbaySearch(note)}" target="_blank" class="link">eBay</a>
+                                    <a href="${buildHeritageSearch(note)}" target="_blank" class="link">Heritage</a>
+                                </td>
+                                <td class="actions">
+                                    <button class="btn btn-sm" onclick="editNote('${note.note_id}')">Edit</button>
+                                    <button class="btn btn-sm btn-danger" onclick="deleteNote('${note.note_id}')">Delete</button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+
+            container.innerHTML = table;
+        }
+
+        function buildEbaySearch(note) {
+            const query = [note.country, note.pick, 'PMG', note.grade, note.epq].filter(Boolean).join(' ');
+            return `https://www.ebay.com/sch/i.html?_nkw=${encodeURIComponent(query)}`;
+        }
+
+        function buildHeritageSearch(note) {
+            const query = [note.country, note.pick, 'PMG', note.grade, note.epq].filter(Boolean).join(' ');
+            return `https://www.ha.com/c/search-results.zx?N=0&Ntk=SI_Titles-Desc&Ntt=${encodeURIComponent(query)}`;
+        }
+
+        function updateKPIs() {
+            const totalCount = notes.length;
+            const filteredCount = filteredNotes.length;
+            
+            const totalPurchase = filteredNotes.reduce((sum, note) => sum + (note.purchase_price || 0), 0);
+            const totalEstimate = filteredNotes.reduce((sum, note) => sum + (note.est_value || 0), 0);
+            
+            const roi = totalPurchase > 0 ? ((totalEstimate - totalPurchase) / totalPurchase * 100).toFixed(1) + '%' : '—';
+
+            document.getElementById('totalCount').textContent = totalCount;
+            document.getElementById('filteredCount').textContent = filteredCount;
+            document.getElementById('totalPurchase').textContent = '$' + totalPurchase.toFixed(2);
+            document.getElementById('totalEstimate').textContent = '$' + totalEstimate.toFixed(2);
+            document.getElementById('portfolioROI').textContent = roi;
+        }
+
+        // Modal functions
+        function openAddModal() {
+            currentEditId = null;
+            document.getElementById('modalTitle').textContent = 'Add Note';
+            document.getElementById('noteForm').reset();
+            document.getElementById('noteModal').classList.add('active');
+        }
+
+        function editNote(noteId) {
+            const note = notes.find(n => n.note_id === noteId);
+            if (!note) return;
+
+            currentEditId = noteId;
+            document.getElementById('modalTitle').textContent = 'Edit Note';
+            
+            // Populate form
+            Object.keys(note).forEach(key => {
+                const input = document.getElementById(key);
+                if (input) {
+                    input.value = note[key] || '';
+                }
+            });
+
+            document.getElementById('noteModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('noteModal').classList.remove('active');
+            currentEditId = null;
+        }
+
+        async function handleNoteSubmit(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const noteData = Object.fromEntries(formData.entries());
+            
+            // Convert numeric fields and handle empty values
+            noteData.grade = noteData.grade ? parseFloat(noteData.grade) : null;
+            noteData.purchase_price = noteData.purchase_price ? parseFloat(noteData.purchase_price) : null;
+            noteData.year = noteData.year ? parseInt(noteData.year) : null;
+            noteData.est_value = noteData.est_value ? parseFloat(noteData.est_value) : null;
+            
+            // Remove empty string values for optional fields
+            Object.keys(noteData).forEach(key => {
+                if (noteData[key] === '' || noteData[key] === null) {
+                    delete noteData[key];
+                }
+            });
+            
+            const response = await handleApiCall(async () => {
+                if (currentEditId) {
+                    // Update existing note
+                    return await fetch(`/api/notes/${currentEditId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(noteData),
+                        credentials: 'include'
+                    });
+                } else {
+                    // Create new note
+                    return await fetch('/api/notes', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(noteData),
+                        credentials: 'include'
+                    });
+                }
+            });
+
+            if (response && response.ok) {
+                closeModal();
+                loadNotes();
+                showToast(currentEditId ? 'Note updated successfully' : 'Note created successfully', 'success');
+            } else if (response) {
+                const error = await response.json();
+                showToast(error.detail || 'Failed to save note', 'error');
+            }
+        }
+
+        async function deleteNote(noteId) {
+            if (!confirm('Are you sure you want to delete this note?')) return;
+
+            const response = await handleApiCall(async () => {
+                return await fetch(`/api/notes/${noteId}`, {
+                    method: 'DELETE',
+                    credentials: 'include'
+                });
+            });
+
+            if (response && response.ok) {
+                loadNotes();
+                showToast('Note deleted successfully', 'success');
+            } else if (response) {
+                showToast('Failed to delete note', 'error');
+            }
+        }
+
+        async function importCSV() {
+            const fileInput = document.getElementById('importFile');
+            const file = fileInput.files[0];
+            
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const response = await handleApiCall(async () => {
+                return await fetch('/api/import', {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'include'
+                });
+            });
+
+            if (response && response.ok) {
+                const result = await response.json();
+                showToast(result.message, 'success');
+                loadNotes();
+            } else if (response) {
+                const error = await response.json();
+                showToast(error.detail || 'Import failed', 'error');
+            }
+
+            fileInput.value = '';
+        }
+
+        function showToast(message, type) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type}`;
+            toast.classList.add('show');
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('noteModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>

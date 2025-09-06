@@ -1,0 +1,13 @@
+note_id,country,pick,grade,purchase_price,epq,pmg_cert,denomination,year,serial,purchase_date,est_value,est_updated_at,notes
+1,United States,1,65,125.00,EPQ,1234567,1 Dollar,1921,A123456,2024-01-15,150.00,2024-01-20T10:30:00Z,Excellent condition with original luster
+2,United States,1,67,200.00,EPQ,1234568,1 Dollar,1922,B234567,2024-01-16,225.00,2024-01-21T14:20:00Z,Beautiful toning on reverse
+3,Canada,1,64,85.00,,,1 Dollar,1935,C345678,2024-01-17,,,Rare variety with small date
+4,United States,1,69,350.00,EPQ,1234569,1 Dollar,1923,D456789,2024-01-18,400.00,2024-01-22T09:15:00Z,Gem quality with full strike
+5,United States,1,63,95.00,,,1 Dollar,1924,E567890,2024-01-19,,,Common date but nice condition
+6,United States,1,66,180.00,EPQ,1234570,1 Dollar,1925,F678901,2024-01-20,210.00,2024-01-23T16:45:00Z,Strong strike with minimal wear
+7,Canada,1,65,110.00,,,1 Dollar,1936,G789012,2024-01-21,,,Maple leaf variety
+8,United States,1,68,280.00,EPQ,1234571,1 Dollar,1926,H890123,2024-01-22,320.00,2024-01-24T11:30:00Z,Exceptional eye appeal
+9,United States,1,64,120.00,,,1 Dollar,1927,I901234,2024-01-23,,,Nice original surfaces
+10,United States,1,67,220.00,EPQ,1234572,1 Dollar,1928,J012345,2024-01-24,250.00,2024-01-25T13:20:00Z,Choice condition with luster
+11,Canada,1,66,140.00,,,1 Dollar,1937,K123456,2024-01-25,,,King George VI variety
+12,United States,1,69,400.00,EPQ,1234573,1 Dollar,1929,L234567,2024-01-26,450.00,2024-01-26T15:10:00Z,Superb gem quality
